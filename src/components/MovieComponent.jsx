@@ -1,16 +1,31 @@
-export default function MovieComponent({ movie }) {
-  function onFavouriteClick() {}
+export default function MovieComponent({ movie, favorites, setFavorite }) {
+  console.log(favorites,"this is the truth")
+  const isFavorite = favorites.some((favmovie) => favmovie.id === movie.id); // We need this to update the value of the checkbox.So it persist after refresh(coming from localstorage)
 
+  function onFavouriteClick(e) {
+    
+    e.preventDefault()
+    if (isFavorite) {
+      setFavorite((prev) =>
+        prev.filter((favmovie) => favmovie.id !== movie.id)
+      );
+    } else {
+      setFavorite(prev => [movie,...prev])
+          console.log(favorites,"tis",movie);
+
+    }
+  }
   return (
     <div className="flex flex-col  items-center m-5  rounded-xl bg-amber-50 p-3 shadow-lg gap-10">
       <div className="hover-3d rounded-xl relative">
         <img className=" shrink-0 " src={movie.url} alt="movie-logo" />
         <div
-          className="favourite  absolute top-10 bottom-0 left-115 tooltip"
+          className="favourite flex  tooltip"
           data-tip="Add to Favourite"
+          onClick={onFavouriteClick}
         >
           <label className="swap">
-            <input type="checkbox" />
+            <input type="checkbox"  checked={isFavorite} readOnly/>
             <div className="swap-on text-red-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

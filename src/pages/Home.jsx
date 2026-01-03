@@ -1,6 +1,7 @@
 import MovieComponent from "../components/MovieComponent";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useContext } from "react";
 import { searchMovies, popularMovies } from "../services/movieapi";
+import { MovieContext } from '../context/FavoriteContext';
 
 export default function Home() {
   const [searchString, setSearchString] = useState("");
@@ -8,6 +9,8 @@ export default function Home() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+
+    const {favorites,setFavorite} = useContext(MovieContext)
 
   useEffect(() => {
     let populateMovies = async () => {
@@ -18,6 +21,7 @@ export default function Home() {
           url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
           description: movie.overview,
           release: movie.release_date,
+          id:`${movie.title}${movie.release}`
         }));
 
         setMovieList(movies);
@@ -66,7 +70,7 @@ export default function Home() {
           >
             <input
               type="text"
-              placeholder="enter your query"
+              placeholder="Enter your query"
               id="search-inp"
               value={searchString}
               onChange={(e) => {
@@ -84,7 +88,7 @@ export default function Home() {
         ) : (
           <div className="grid-row-1 md:grid grid-cols-3 gap-2">
             {movielist.map((movie) => (
-              <MovieComponent movie={movie} key={movie.title} />
+              <MovieComponent movie={movie} favorites={favorites} setFavorite={setFavorite} key={movie.title} />
             ))}
           </div>
         )}
