@@ -14,6 +14,9 @@ export default function Home() {
 
   useEffect(() => {
     let populateMovies = async () => {
+      console.log("hey start",movielist)
+      
+
       try {
         let movie_results = await popularMovies();
         let movies = movie_results.map((movie) => ({
@@ -31,8 +34,15 @@ export default function Home() {
         setLoading(false);
       }
     };
-
+    if (movielist.length === 0){
     populateMovies();
+
+    }
+    else{
+    console.log("movies not empty",movielist)
+
+    }
+
   }, []);
 
   async function handleQuery(e) {
@@ -51,6 +61,7 @@ export default function Home() {
         url: movie.poster_path?`https://image.tmdb.org/t/p/w500${movie.poster_path}`:"https://img.freepik.com/free-photo/cinema-tickets-with-frame-3d-glasses_23-2148133486.jpg?t=st=1767340128~exp=1767343728~hmac=dfd57f7abf1ab9ebedbe48c075456ed2cf1f75b9a0464d8af6fa264b0b3f0ddb&w=1480" ,
         description: movie.overview,
         release: movie.release_date,
+        id:`${movie.title}-${movie.release_date}`
       }));
       setMovieList(movies);
     } catch (error) {
@@ -70,12 +81,13 @@ export default function Home() {
           >
             <input
               type="text"
-              placeholder="Enter your query"
+              placeholder="Search Movie"
               id="search-inp"
               value={searchString}
               onChange={(e) => {
                 setSearchString(e.target.value);
               }}
+              className="border-5"
             />
             <button type="submit" className="btn bg-red-500">
               Search
@@ -88,7 +100,7 @@ export default function Home() {
         ) : (
           <div className="grid-row-1 md:grid grid-cols-3 gap-2">
             {movielist.map((movie) => (
-              <MovieComponent movie={movie} favorites={favorites} setFavorite={setFavorite} key={movie.title} />
+              <MovieComponent movie={movie} favorites={favorites} setFavorite={setFavorite} key={movie.id} />
             ))}
           </div>
         )}

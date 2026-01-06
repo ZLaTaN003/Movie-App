@@ -1,5 +1,4 @@
 export default function MovieComponent({ movie, favorites, setFavorite }) {
-  console.log(favorites,"this is the truth")
   const isFavorite = favorites.some((favmovie) => favmovie.id === movie.id); // We need this to update the value of the checkbox.So it persist after refresh(coming from localstorage)
 
   function onFavouriteClick(e) {
@@ -11,7 +10,6 @@ export default function MovieComponent({ movie, favorites, setFavorite }) {
       );
     } else {
       setFavorite(prev => [movie,...prev])
-          console.log(favorites,"tis",movie);
 
     }
   }
